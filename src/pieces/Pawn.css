@@ -1,4 +1,33 @@
-.Pawn{}
-.pawn-head{}
-.pawn-middle{}
-.pawn-base{}
+.Pawn{
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    margin: 1em;
+}
+.pawn-head{
+    position: absolute;
+    top: 20%;
+    left: 39%;
+    width: 20%;
+    height: 20%;
+    border-radius: 50%;
+    border: 1px solid black;
+}
+.pawn-middle{
+    position: absolute;
+    top: 41%;
+    left: 34%;
+    width: 30%;
+    height: 30%;
+    border: 1px solid black;
+    border-radius: 50% 50% 0 0;
+}
+.pawn-base{
+    position: absolute;
+    top: 72%;
+    left: 31.5%;
+    width: 35%;
+    height: 10%;
+    border: 1px solid black;
+}
