@@ -1,24 +1,49 @@
 import React from 'react';
-import logo from './logo.svg';
+// styling
 import './App.css';
 
-function App() {
+// components
+import LightSquare from './squares/LightSquare';
+import DarkSquare from './squares/DarkSquare';
+
+const App = () => {
+  const eightArr = [1,2,3,4,5,6,7,8];
+
+  const renderOddRow = () => {
+    return eightArr.map(n => {
+      return(
+        <>
+          <LightSquare/>
+          <DarkSquare/>
+        </>
+    )})
+  }
+  const renderEvenRow = () => {
+    return eightArr.map(n => {
+      return(
+        <>
+          <DarkSquare/>
+          <LightSquare/>
+        </>
+    )})
+  }
+
+  const renderBoard = () => {
+    return eightArr.map(n => {
+      return (
+        <>
+          {renderEvenRow()}
+          {renderOddRow()}
+        </>
+      )
+    })
+  }
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {renderBoard()}
+   
+
     </div>
   );
 }
