@@ -6,44 +6,24 @@ import './App.css';
 import LightSquare from './squares/LightSquare';
 import DarkSquare from './squares/DarkSquare';
 
+import Pawn from './pieces/Pawn'
+
 const App = () => {
-  const eightArr = [1,2,3,4,5,6,7,8];
+  const fourArr = [1,2,3,4];
 
-  const renderOddRow = () => {
-    return eightArr.map(n => {
-      return(
-        <>
-          <LightSquare/>
-          <DarkSquare/>
-        </>
-    )})
-  }
-  const renderEvenRow = () => {
-    return eightArr.map(n => {
-      return(
-        <>
-          <DarkSquare/>
-          <LightSquare/>
-        </>
-    )})
-  }
+  const renderOddRow = fourArr.map(n => [<LightSquare/>, <DarkSquare/>])
+  
+  const renderEvenRow = fourArr.map(n => [<DarkSquare/>,<LightSquare/>])
 
-  const renderBoard = () => {
-    return eightArr.map(n => {
-      return (
-        <>
-          {renderEvenRow()}
-          {renderOddRow()}
-        </>
-      )
-    })
-  }
-
+  const renderBoard = fourArr.map(n => [renderEvenRow, renderOddRow])
+  
   return (
     <div className="App">
-      {renderBoard()}
-   
+      <div className="board">
+        {renderBoard}
+      </div>
 
+      <Pawn/>
     </div>
   );
 }
