@@ -1,12 +1,12 @@
 .square{
     width: 100%;
-    height: 100%;
+    padding-bottom: 100%;
 }
 
 .LightSquare{
-    background-color: lightgrey;
+    background-color: #E0FDFE;
 }
 
 .DarkSquare{
-    background-color: black;
+    background-color: #0A0908;
 }
