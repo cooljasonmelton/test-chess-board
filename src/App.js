@@ -22,8 +22,6 @@ const App = () => {
       <div className="board">
         {renderBoard}
       </div>
-
-      <Pawn/>
     </div>
   );
 }
