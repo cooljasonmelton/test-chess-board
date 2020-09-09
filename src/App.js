@@ -19,12 +19,9 @@ const App = () => {
   
   return (
     <div className="App">
-
       <div className="board">
         {renderBoard}
       </div>
-
-      <Pawn/>
     </div>
   );
 }

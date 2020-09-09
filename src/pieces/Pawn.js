@@ -3,12 +3,13 @@ import React from 'react';
 // styling
 import './Pawn.css';
 
-const Pawn = () => {
+const Pawn = props => {
+  const {color} = props
   return (
-    <div className="Pawn">
-        <div className="pawn-head"></div>
-        <div className="pawn-middle"></div>
-        <div className="pawn-base"></div>
+    <div className="Pawn ">
+        <div className={"pawn-head " + color}></div>
+        <div className={"pawn-middle " + color}></div>
+        <div className={"pawn-base " + color}></div>
     </div>
   );
 }
