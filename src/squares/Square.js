@@ -4,7 +4,6 @@ import React from 'react';
 import './Square.css';
 
 const Square = props => {
-    // gets color and piece
 
     return (
         <div className="Square">
