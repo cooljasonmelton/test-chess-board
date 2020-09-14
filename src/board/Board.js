@@ -18,31 +18,54 @@ const Board = () => {
             [null, null, null, null, null, null, null, null]
         ]
     )
+
+    // sets if white's turn
+    const [whTurn, setWhTurn] = useState(true)
+
+    const selectPiece = num => {
+        console.log(num)
+    }
     
+    const endTurn = () => {
+        setWhTurn(!whTurn)
+    }
+
     const renderGame = () => {
-        let rowCount = 0
-        let sqCount = 0
+        let rowCount = 0;
+        let sqCount = 0;
         const renderBoard = board.map(row => {
             rowCount++
             return row.map(sq=> {  
                 let sqColor = sqCount % 2 === 0 ? "bl" : "wh"
-                if (rowCount % 2 === 0) sqColor = sqCount % 2 === 0 ? "wh" : "bl"        
-                sqCount++      
-                if (sq === "wp") return <div className={"square " + sqColor}><Pawn color="wh"/></div>
-                if (sq === "bp") return <div className={"square " + sqColor}><Pawn color="bl"/></div>
+                if (rowCount % 2 === 0) sqColor = sqCount % 2 === 0 ? "wh" : "bl"  
+                let innerCount = () => sqCount++
+                // if white pawn
+                if (sq === "wp") {
+                    let sqNum = innerCount()
+                    return (
+                        <div className={"square " + sqColor}
+                            onClick={()=>selectPiece(sqNum)}>
+                            <Pawn color="wh"/>
+                        </div>
+                    )
+                }
+                // if black pawn
+                if (sq === "bp") {
+                    let sqNum = innerCount()
+                    return (
+                        <div className={"square " + sqColor} 
+                            onClick={()=>selectPiece(sqNum)}>
+                            <Pawn color="bl"/>
+                        </div>
+                    )
+                }
+                innerCount()
                 return <div className={"square "+ sqColor}></div>
         })})
-
         return renderBoard
     }
 
 
-
-
-
-    // controls turn
-    const [turn, setTurn] = useState('White')
-    
     return (
         <div className="Board">
             <div className="board-content">
