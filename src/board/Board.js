@@ -22,16 +22,30 @@ const Board = () => {
     // boolean if white's turn
     const [whTurn, setWhTurn] = useState(true)
 
+    // clear highlights of available squares
+    const clearAv = () => {
+        const updateBoard = [...board].map(r => r.map(sq=>{
+            console.log(sq)
+            if (sq === "av") return null
+            else return sq
+        }))
+            
+            // not working!
+        setBoard(updateBoard)
+    }
+
     // highlight white pieces to see moves
     const wSelectPiece = num => {
+        clearAv()
         if (num > 47) {
             // first move, offer two spaces
         }
-
-        console.log(num, num - 8, num - 16)
-
-        const movesAvailable = board
-        setBoard()
+        let startRow = Math.floor(num / 8)
+        let startSq = (num % 8) 
+        const updateBoard = [...board]
+        updateBoard[startRow - 1][startSq] = "av"
+        setBoard(updateBoard)        
+        console.log(board)
     }
 
     // highlight black pieces to see moves
@@ -41,6 +55,8 @@ const Board = () => {
         }
         console.log(num, num + 8, num + 16)
     }
+
+
 
     
     const endTurn = (start, end) => {
@@ -87,12 +103,7 @@ const Board = () => {
                     )
                 }
 
-
                 // check if squares available for move after click
-
-
-
-
 
                 innerCount()
                 return <div key={sqCount} className={"square "+ sqColor}></div>
@@ -115,3 +126,13 @@ const Board = () => {
 }
 
 export default Board;
+
+
+// PSEUDO CODE: 
+
+// clicking on piece shows available moves, 
+// edits board array changing null to "av" for available
+// those become highlighted divs
+// re render if "av" squares get onclick to move pieces
+// send if that gets clicked, send coordinates to end turn, update pawns on board
+// render new board
