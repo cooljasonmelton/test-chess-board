@@ -1,41 +1,7 @@
-.Pawn{
+.Pawn {
+    padding: 0.5em;
+}
+.Pawn > img {
     width: 100%;
     height: 100%;
-}
-.white-piece{
-    background-color: white;
-    border: 1px solid #0A0908;
-
-}
-.black-piece{
-    background-color: #0A0908;
-    border: 1px solid white;
-
-}
-.pawn-head{
-    position: absolute;
-    z-index: 0;
-    top: 20%;
-    left: 38%;
-    width: 20%;
-    height: 20%;
-    border-radius: 50%;
-}
-.pawn-middle{
-    position: absolute;
-    z-index: 1;
-
-    top: 35%;
-    left: 33%;
-    width: 30%;
-    height: 30%;
-    border-radius: 50% 50% 0 0;
-}
-.pawn-base{
-    position: absolute;
-    z-index: 2;
-    top: 65%;
-    left: 30.3%;
-    width: 36%;
-    height: 10%;
 }
