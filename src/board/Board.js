@@ -18,7 +18,7 @@ const Board = () => {
             [null, null, null, null, null, null, null, null]
         ]
     )
-    
+
     const renderGame = () => {
         let rowCount = 0
         let sqCount = 0
@@ -35,10 +35,6 @@ const Board = () => {
 
         return renderBoard
     }
-
-
-
-
 
     // controls turn
     const [turn, setTurn] = useState('White')
