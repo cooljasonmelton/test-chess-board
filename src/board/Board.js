@@ -37,16 +37,20 @@ const Board = () => {
     // boolean if white's turn
     const [whTurn, setWhTurn] = useState(true)
 
+    const [showAv, setShowAv] = useState(false)
+
     // clear highlights of available squares
     const clearAv = () => {
-        // const updateBoard = [...board].map(r => r.map(sq=>{
-        //     console.log(sq)
-        //     if (sq === "av") return null
-        //     else return sq
-        // }))
-            
-        //     // not working!
-        // setBoard(updateBoard)
+        const editBoard = [...board]
+
+        const clearBoard = editBoard.map(row =>{
+            return row.map(sq => {
+                if (sq==="av") return null
+                return sq
+            })
+        })
+
+        return setBoard(clearBoard)
     }
 
     // highlight white pieces to see moves
@@ -154,6 +158,8 @@ const Board = () => {
             </div>
             <div>Turn: {whTurn ? "White" : "Black"}</div>
             <button onClick={resetBoard}> reset board </button>
+            <button onClick={clearAv}> clear av </button>
+
         </div>
         // TODO add info container to display turn and instructions
     );
