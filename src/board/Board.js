@@ -50,10 +50,16 @@ const Board = () => {
 
     // highlight black pieces to see moves
     const bSelectPiece = num => {
-        if (num > 16) {
-            // first move, offer two spaces
-        }
-        console.log(num, num + 8, num + 16)
+        const updateBoard = [...board]
+        let startRow = Math.floor(num / 8)
+        const twoSpace = updateBoard[startRow + 2][num % 8]
+        const oneSpace = updateBoard[startRow + 1][num % 8]
+
+        // first pawn move gives two spaces
+        if (num < 16 && !twoSpace) updateBoard[startRow + 2][num % 8] = "av"
+        // first space available to move
+        if (!oneSpace) updateBoard[startRow + 1][num % 8] = "av"
+        setBoard(updateBoard)  
     }
 
 
