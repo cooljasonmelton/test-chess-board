@@ -13,11 +13,26 @@ const Board = () => {
             [null, null, null, null, null, null, null, null],
             [null, null, null, null, null, null, null, null],
             [null, null, null, null, null, null, null, null],
-            ["wp", null, null, null, null, null, null, null],
+            [null, null, null, null, null, null, null, null],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             [null, null, null, null, null, null, null, null]
         ]
     )
+
+    const resetBoard = () => {
+        setBoard(
+            [
+                [null, null, null, null, null, null, null, null],
+                ["bp", "bp", "bp", "bp", "bp", "bp", "bp", "bp"],
+                [null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null],
+                [null, null, null, null, null, null, null, null],
+                ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
+                [null, null, null, null, null, null, null, null]
+            ]
+        )
+    }
 
     // boolean if white's turn
     const [whTurn, setWhTurn] = useState(true)
@@ -50,10 +65,16 @@ const Board = () => {
 
     // highlight black pieces to see moves
     const bSelectPiece = num => {
-        if (num > 16) {
-            // first move, offer two spaces
-        }
-        console.log(num, num + 8, num + 16)
+        const updateBoard = [...board]
+        let startRow = Math.floor(num / 8)
+        const twoSpace = updateBoard[startRow + 2][num % 8]
+        const oneSpace = updateBoard[startRow + 1][num % 8]
+
+        // first pawn move gives two spaces
+        if (num < 16 && !twoSpace) updateBoard[startRow + 2][num % 8] = "av"
+        // first space available to move
+        if (!oneSpace) updateBoard[startRow + 1][num % 8] = "av"
+        setBoard(updateBoard)  
     }
 
 
@@ -103,8 +124,20 @@ const Board = () => {
                     )
                 }
 
-                // check if squares available for move after click
+                if (sq === "av") {
+                    let sqNum = innerCount()
+                    return(
+                        <div key={sqCount}
+                            className={"square " + sqColor + " cfb"} 
+                            onClick={null}>
+                                
+                            <div className="av-marker"></div>
+                        </div>
+                    )
 
+                }
+
+                // check if squares available for move after click
                 innerCount()
                 return <div key={sqCount} className={"square "+ sqColor}></div>
         })})
@@ -120,6 +153,7 @@ const Board = () => {
                 </div>
             </div>
             <div>Turn: {whTurn ? "White" : "Black"}</div>
+            <button onClick={resetBoard}> reset board </button>
         </div>
         // TODO add info container to display turn and instructions
     );
@@ -130,9 +164,9 @@ export default Board;
 
 // PSEUDO CODE: 
 
-// clicking on piece shows available moves, 
+// X  clicking on piece shows available moves, 
 // edits board array changing null to "av" for available
 // those become highlighted divs
 // re render if "av" squares get onclick to move pieces
 // send if that gets clicked, send coordinates to end turn, update pawns on board
-// render new board
+// X reset button renders new board
