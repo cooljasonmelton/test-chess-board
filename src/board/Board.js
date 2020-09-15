@@ -13,7 +13,7 @@ const Board = () => {
             [null, null, null, null, null, null, null, null],
             [null, null, null, null, null, null, null, null],
             [null, null, null, null, null, null, null, null],
-            ["wp", null, null, null, null, null, null, null],
+            [null, null, null, null, null, null, null, null],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             [null, null, null, null, null, null, null, null]
         ]
@@ -103,8 +103,20 @@ const Board = () => {
                     )
                 }
 
-                // check if squares available for move after click
+                if (sq === "av") {
+                    let sqNum = innerCount()
+                    return(
+                        <div key={sqCount}
+                            className={"square " + sqColor + " cfb"} 
+                            onClick={null}>
+                                
+                            <div className="av-marker"></div>
+                        </div>
+                    )
 
+                }
+
+                // check if squares available for move after click
                 innerCount()
                 return <div key={sqCount} className={"square "+ sqColor}></div>
         })})
