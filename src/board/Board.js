@@ -13,7 +13,7 @@ const Board = () => {
             [null, null, null, null, null, null, null, null],
             [null, null, null, null, null, null, null, null],
             [null, null, null, null, null, null, null, null],
-            [null, null, null, null, null, null, null, null],
+            ["wp", null, null, null, null, null, null, null],
             ["wp", "wp", "wp", "wp", "wp", "wp", "wp", "wp"],
             [null, null, null, null, null, null, null, null]
         ]
@@ -24,28 +24,28 @@ const Board = () => {
 
     // clear highlights of available squares
     const clearAv = () => {
-        const updateBoard = [...board].map(r => r.map(sq=>{
-            console.log(sq)
-            if (sq === "av") return null
-            else return sq
-        }))
+        // const updateBoard = [...board].map(r => r.map(sq=>{
+        //     console.log(sq)
+        //     if (sq === "av") return null
+        //     else return sq
+        // }))
             
-            // not working!
-        setBoard(updateBoard)
+        //     // not working!
+        // setBoard(updateBoard)
     }
 
     // highlight white pieces to see moves
     const wSelectPiece = num => {
-        clearAv()
-        if (num > 47) {
-            // first move, offer two spaces
-        }
-        let startRow = Math.floor(num / 8)
-        let startSq = (num % 8) 
         const updateBoard = [...board]
-        updateBoard[startRow - 1][startSq] = "av"
+        let startRow = Math.floor(num / 8)
+        const twoSpace = updateBoard[startRow - 2][num % 8]
+        const oneSpace = updateBoard[startRow - 1][num % 8]
+
+        // first pawn move gives two spaces
+        if (num > 47 && !twoSpace) updateBoard[startRow - 2][num % 8] = "av"
+        // first space available to move
+        if (!oneSpace) updateBoard[startRow - 1][num % 8] = "av"
         setBoard(updateBoard)        
-        console.log(board)
     }
 
     // highlight black pieces to see moves

@@ -1,6 +1,8 @@
 .Pawn {
     padding: 0.5em;
+    cursor: pointer;
 }
+
 .Pawn > img {
     width: 100%;
     height: 100%;
