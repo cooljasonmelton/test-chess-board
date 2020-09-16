@@ -84,6 +84,10 @@ const Board = () => {
 
     const movePiece = num => {
         console.log(num)
+
+        const clearBoard = [...clearAv(board)]
+        setBoard(clearBoard)
+        setWhTurn(!whTurn)
     }
 
 
