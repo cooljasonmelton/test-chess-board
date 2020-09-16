@@ -5,6 +5,9 @@ import './Board.css';
 import Pawn from '../pieces/Pawn';
 
 const Board = () => {
+    // boolean if white's turn
+    const [whTurn, setWhTurn] = useState(true)
+
     // hold pieces' position
     const [board, setBoard] = useState(
         [
@@ -34,24 +37,23 @@ const Board = () => {
         )
     }
 
-    // boolean if white's turn
-    const [whTurn, setWhTurn] = useState(true)
 
-    // clear highlights of available squares
-    const clearAv = () => {
-        // const updateBoard = [...board].map(r => r.map(sq=>{
-        //     console.log(sq)
-        //     if (sq === "av") return null
-        //     else return sq
-        // }))
-            
-        //     // not working!
-        // setBoard(updateBoard)
+    // takes array or arrays like board, returns similar shaped array
+    // clear "av" already on array available squares
+    const clearAv = arr => {
+        const clearBoard = arr.map(row =>{
+            return row.map(sq => {
+                if (sq==="av") return null
+                return sq
+            })
+        })
+        return clearBoard
     }
 
     // highlight white pieces to see moves
     const wSelectPiece = num => {
-        const updateBoard = [...board]
+        if (!whTurn) return
+        const updateBoard = [...clearAv(board)]
         let startRow = Math.floor(num / 8)
         const twoSpace = updateBoard[startRow - 2][num % 8]
         const oneSpace = updateBoard[startRow - 1][num % 8]
@@ -65,7 +67,8 @@ const Board = () => {
 
     // highlight black pieces to see moves
     const bSelectPiece = num => {
-        const updateBoard = [...board]
+        if (whTurn) return
+        const updateBoard = [...clearAv(board)]
         let startRow = Math.floor(num / 8)
         const twoSpace = updateBoard[startRow + 2][num % 8]
         const oneSpace = updateBoard[startRow + 1][num % 8]
