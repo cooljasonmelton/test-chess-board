@@ -37,4 +37,10 @@
     border-radius: 50%;
     border: 1px solid #635380;
     background-color: #A1CDA8;
+    cursor: pointer;
+}
+.av-square{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }

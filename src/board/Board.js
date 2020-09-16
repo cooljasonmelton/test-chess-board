@@ -38,8 +38,7 @@ const Board = () => {
     }
 
 
-    // takes array or arrays like board, returns similar shaped array
-    // clear "av" already on array available squares
+    // takes array or arrays like board, returns that array clearing all 'av'
     const clearAv = arr => {
         const clearBoard = arr.map(row =>{
             return row.map(sq => {
@@ -52,7 +51,9 @@ const Board = () => {
 
     // highlight white pieces to see moves
     const wSelectPiece = num => {
+        // return if it's not white turn
         if (!whTurn) return
+        // copy board and clear av markers
         const updateBoard = [...clearAv(board)]
         let startRow = Math.floor(num / 8)
         const twoSpace = updateBoard[startRow - 2][num % 8]
@@ -67,12 +68,13 @@ const Board = () => {
 
     // highlight black pieces to see moves
     const bSelectPiece = num => {
+        // return if it's not black turn
         if (whTurn) return
+        // copy board and clear av markers
         const updateBoard = [...clearAv(board)]
         let startRow = Math.floor(num / 8)
         const twoSpace = updateBoard[startRow + 2][num % 8]
         const oneSpace = updateBoard[startRow + 1][num % 8]
-
         // first pawn move gives two spaces
         if (num < 16 && !twoSpace) updateBoard[startRow + 2][num % 8] = "av"
         // first space available to move
@@ -80,14 +82,11 @@ const Board = () => {
         setBoard(updateBoard)  
     }
 
-
-
-    
-    const endTurn = (start, end) => {
-        // takes starting point and ending point and edits board
-        // changes turn
-        setWhTurn(!whTurn)
+    const movePiece = num => {
+        console.log(num)
     }
+
+
 
     const renderGame = () => {
         let rowCount = 0;
@@ -126,15 +125,17 @@ const Board = () => {
                         </div>
                     )
                 }
-
+                
                 if (sq === "av") {
                     let sqNum = innerCount()
                     return(
                         <div key={sqCount}
-                            className={"square " + sqColor + " cfb"} 
-                            onClick={null}>
+                            className={"square " + sqColor} 
+                            onClick={() => movePiece(sqNum)}>
+                            <div className="av-square cfb">
+                                <div className="av-marker"></div>
+                            </div>
                                 
-                            <div className="av-marker"></div>
                         </div>
                     )
 
