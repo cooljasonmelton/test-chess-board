@@ -66,7 +66,7 @@ const Board = () => {
     const clearCapAv = arr => {
         const clearBoard = arr.map(row =>{
             return row.map(sq => {
-                if (sq && sq.substring(2,4) === "ep") return sq.substring(0,2)
+                if (sq && sq.substring(2,4) === "ep") return null
                 if (sq && sq.substring(2,4) === "av") return sq.substring(0,2)
                 return sq
             })
@@ -81,10 +81,10 @@ const Board = () => {
 
         // save current piece to state
         setCurrPiece(num)
+        const startRow = Math.floor(num / 8)
 
         // copy board and clear av markers
         const updateBoard = [...clearAv(clearCapAv(board))]
-        const startRow = Math.floor(num / 8)
 
         // move one squares
         const oneSpace = updateBoard[startRow - 1][num % 8]
@@ -147,15 +147,7 @@ const Board = () => {
         const endRow = Math.floor(num / 8)
         const endSq = clearBoard[endRow][num % 8]
 
-        // edit board for en passant
-        const wEnPassantSq = clearBoard[endRow - 1][num % 8]
-        const bEnPassantSq = clearBoard[endRow + 1][num % 8]
 
-        if (wEnPassantSq === "wpep" || bEnPassantSq === "bpep") {
-            clearBoard[startRow][currPiece % 8] = null
-            if (whTurn) clearBoard[endRow][num % 8] = "wp"
-            if (!whTurn) clearBoard[endRow][num % 8] = "bp"
-        }
 
         // edit board for piece moving or capturing
         if (!endSq || (endSq === "wpav") || (endSq === "bpav")) {
@@ -163,7 +155,6 @@ const Board = () => {
             if (whTurn) clearBoard[endRow][num % 8] = "wp"
             if (!whTurn) clearBoard[endRow][num % 8] = "bp"
         }
-
 
 
         // update board clear of capture / en passant avs
