@@ -8,6 +8,9 @@ const Board = () => {
     // boolean if white's turn
     const [whTurn, setWhTurn] = useState(true)
 
+    // currently selected piece
+    const [currPiece, setCurrPiece] = useState(null)
+
     // hold pieces' position
     const [board, setBoard] = useState(
         [
@@ -23,6 +26,7 @@ const Board = () => {
     )
 
     const resetBoard = () => {
+        setWhTurn(true)
         setBoard(
             [
                 [null, null, null, null, null, null, null, null],
@@ -37,9 +41,7 @@ const Board = () => {
         )
     }
 
-
-    // takes array or arrays like board, returns similar shaped array
-    // clear "av" already on array available squares
+    // takes array or arrays like board, returns that array clearing all 'av'
     const clearAv = arr => {
         const clearBoard = arr.map(row =>{
             return row.map(sq => {
@@ -52,7 +54,13 @@ const Board = () => {
 
     // highlight white pieces to see moves
     const wSelectPiece = num => {
+        // return if it's not white turn
         if (!whTurn) return
+
+        // save current piece to state
+        setCurrPiece(num)
+
+        // copy board and clear av markers
         const updateBoard = [...clearAv(board)]
         let startRow = Math.floor(num / 8)
         const twoSpace = updateBoard[startRow - 2][num % 8]
@@ -60,6 +68,7 @@ const Board = () => {
 
         // first pawn move gives two spaces
         if (num > 47 && !twoSpace) updateBoard[startRow - 2][num % 8] = "av"
+   
         // first space available to move
         if (!oneSpace) updateBoard[startRow - 1][num % 8] = "av"
         setBoard(updateBoard)        
@@ -67,7 +76,13 @@ const Board = () => {
 
     // highlight black pieces to see moves
     const bSelectPiece = num => {
+        // return if it's not black turn
         if (whTurn) return
+
+        // save current piece to state
+        setCurrPiece(num)
+        
+        // copy board and clear av markers
         const updateBoard = [...clearAv(board)]
         let startRow = Math.floor(num / 8)
         const twoSpace = updateBoard[startRow + 2][num % 8]
@@ -75,6 +90,7 @@ const Board = () => {
 
         // first pawn move gives two spaces
         if (num < 16 && !twoSpace) updateBoard[startRow + 2][num % 8] = "av"
+  
         // first space available to move
         if (!oneSpace) updateBoard[startRow + 1][num % 8] = "av"
         setBoard(updateBoard)  
@@ -82,12 +98,24 @@ const Board = () => {
 
 
 
-    
-    const endTurn = (start, end) => {
-        // takes starting point and ending point and edits board
-        // changes turn
+
+
+    const movePiece = num => {
+        console.log(num, currPiece)
+        let startRow = Math.floor(currPiece / 8)
+        let endRow = Math.floor(num / 8)
+        const clearBoard = [...clearAv(board)]
+        const endSq = clearBoard[endRow][num % 8]
+        if (!endSq) {
+            clearBoard[startRow][num % 8] = null
+            if (whTurn) clearBoard[endRow][num % 8] = "wp"
+            if (!whTurn) clearBoard[endRow][num % 8] = "bp"
+        }
+        setBoard(clearBoard)
         setWhTurn(!whTurn)
     }
+
+
 
     const renderGame = () => {
         let rowCount = 0;
@@ -108,7 +136,7 @@ const Board = () => {
                 if (sq === "wp") {
                     let sqNum = innerCount()
                     return (
-                        <div key={sqNum} 
+                        <div key={sqCount} 
                             className={"square " + sqColor}
                             onClick={()=>wSelectPiece(sqNum)}>
                             <Pawn color="wh"/>
@@ -119,22 +147,24 @@ const Board = () => {
                 if (sq === "bp") {
                     let sqNum = innerCount()
                     return (
-                        <div key={sqNum}
+                        <div key={sqCount}
                             className={"square " + sqColor} 
                             onClick={()=>bSelectPiece(sqNum)}>
                             <Pawn color="bl"/>
                         </div>
                     )
                 }
-
+                
                 if (sq === "av") {
                     let sqNum = innerCount()
                     return(
                         <div key={sqCount}
-                            className={"square " + sqColor + " cfb"} 
-                            onClick={null}>
+                            className={"square " + sqColor} 
+                            onClick={() => movePiece(sqNum)}>
+                            <div className="av-square cfb">
+                                <div className="av-marker"></div>
+                            </div>
                                 
-                            <div className="av-marker"></div>
                         </div>
                     )
 
@@ -146,6 +176,7 @@ const Board = () => {
         })})
         return renderBoard
     }
+
 
 
     return (
