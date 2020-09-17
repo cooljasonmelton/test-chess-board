@@ -80,8 +80,7 @@ const Board = () => {
         const updateBoard = [...clearAv(clearCapAv(board))]
         const startRow = Math.floor(num / 8)
 
-        // move squares
-        const twoSpace = updateBoard[startRow - 2][num % 8]
+        // move one squares
         const oneSpace = updateBoard[startRow - 1][num % 8]
 
         // capture squares
@@ -92,8 +91,8 @@ const Board = () => {
         if (capRight === "bp") updateBoard[startRow - 1][(num % 8) - 1] =  ("bp" + "av")
         if (capLeft === "bp") updateBoard[startRow - 1][(num % 8) + 1] =  ("bp" + "av")
         
-        // first pawn move gives two spaces
-        if (num > 47 && !twoSpace && !oneSpace) updateBoard[startRow - 2][num % 8] = "av"
+        // first pawn can move two spaces
+        if (num > 47 && !updateBoard[startRow - 2][num % 8] && !oneSpace) updateBoard[startRow - 2][num % 8] = "av"
    
         // first space available to move
         if (!oneSpace) updateBoard[startRow - 1][num % 8] = "av"
@@ -113,7 +112,6 @@ const Board = () => {
         const startRow = Math.floor(num / 8)
 
         // move squares
-        const twoSpace = updateBoard[startRow + 2][num % 8]
         const oneSpace = updateBoard[startRow + 1][num % 8]
 
         // capture squares
@@ -125,7 +123,7 @@ const Board = () => {
         if (capLeft === "wp") updateBoard[startRow + 1][(num % 8) + 1] =  ("wp" + "av")
 
         // first pawn move gives two spaces
-        if (num < 16 && !twoSpace && !oneSpace) updateBoard[startRow + 2][num % 8] = "av"
+        if (num < 16 && !updateBoard[startRow + 2][num % 8] && !oneSpace) updateBoard[startRow + 2][num % 8] = "av"
   
         // first space available to move
         if (!oneSpace) updateBoard[startRow + 1][num % 8] = "av"
