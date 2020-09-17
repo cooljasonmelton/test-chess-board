@@ -92,14 +92,14 @@ const Board = () => {
         // capture squares
         const capRight = updateBoard[startRow - 1][(num % 8) + 1]
         const capLeft = updateBoard[startRow - 1][(num % 8) - 1]
+        
+        // capture available
+        if (capRight === "bp") updateBoard[startRow - 1][(num % 8) + 1] = ("bpav")
+        if (capLeft === "bp") updateBoard[startRow - 1][(num % 8) - 1] = ("bpav")
 
         // en passant av
         if ((num + 1) === enPassant) updateBoard[startRow - 1][(num % 8) + 1] = "bpep"
         if ((num - 1) === enPassant) updateBoard[startRow - 1][(num % 8) - 1] = "bpep"
-
-        // capture available
-        if (capRight === "bp") updateBoard[startRow - 1][(num % 8) + 1] = ("bpav")
-        if (capLeft === "bp") updateBoard[startRow - 1][(num % 8) - 1] = ("bpav")
         
         // first pawn can move two spaces
         if (num > 47 && !updateBoard[startRow - 2][num % 8] && !oneSpace) updateBoard[startRow - 2][num % 8] = "av"
@@ -132,6 +132,10 @@ const Board = () => {
         if (capRight === "wp") updateBoard[startRow + 1][(num % 8) + 1] =  ("wpav")
         if (capLeft === "wp") updateBoard[startRow + 1][(num % 8) - 1] =  ("wpav")
 
+        // en passant av
+        if ((num + 1) === enPassant) updateBoard[startRow + 1][(num % 8) + 1] = "wpep"
+        if ((num - 1) === enPassant) updateBoard[startRow + 1][(num % 8) - 1] = "wpep"
+        
         // first pawn move gives two spaces
         if (num < 16 && !updateBoard[startRow + 2][num % 8] && !oneSpace) updateBoard[startRow + 2][num % 8] = "av"
   
@@ -147,14 +151,26 @@ const Board = () => {
         const endRow = Math.floor(num / 8)
         const endSq = clearBoard[endRow][num % 8]
 
-
-
-        // edit board for piece moving or capturing
-        if (!endSq || (endSq === "wpav") || (endSq === "bpav")) {
+        // edit board for piece moving or capturing or passant
+        if (!endSq || (endSq === "wpav") || (endSq === "bpav" || (endSq === "bpep") || endSq === "wpep" )) {
+            if (endSq === "bpep" || endSq === "wpep") clearBoard[startRow][num % 8] = null
             clearBoard[startRow][currPiece % 8] = null
             if (whTurn) clearBoard[endRow][num % 8] = "wp"
             if (!whTurn) clearBoard[endRow][num % 8] = "bp"
         }
+
+        // en passant
+        console.log(clearBoard[endRow][num % 8], enPassant, board)
+        // if (endSq === "bpep" || endSq === "wpep") {
+        //     clearBoard[startRow][currPiece % 8] = null
+        //     if (whTurn) {
+        //         clearBoard[endRow][num % 8] = "wp"
+        //     }
+        //     if (!whTurn){
+        //         clearBoard[startRow][num % 8] = null
+        //         clearBoard[endRow][num % 8] = "bp"
+        //     } 
+        // }
 
 
         // update board clear of capture / en passant avs
