@@ -2,6 +2,8 @@ import React,{ useState } from 'react';
 
 // styling
 import './Board.css';
+
+// components
 import Pawn from '../pieces/Pawn';
 
 const Board = () => {
@@ -11,7 +13,14 @@ const Board = () => {
     // currently selected piece
     const [currPiece, setCurrPiece] = useState(null)
 
+    // if move two space records num for to check for en passant
+    const [enPassant, setEnPassant] = useState(null)
+
     // hold pieces' position
+    // bp = black pawn; wp = white pawn; 
+    // av = available move; 
+    // wpav = capurable wp; bpav = capturable bp
+    // wpep = en passant white pawn; bpep = en passant black pawn
     const [board, setBoard] = useState(
         [
             [null, null, null, null, null, null, null, null],
@@ -41,11 +50,24 @@ const Board = () => {
         )
     }
 
-    // takes array or arrays like board, returns that array clearing all 'av'
+    // clear board of all 'av'
     const clearAv = arr => {
         const clearBoard = arr.map(row =>{
             return row.map(sq => {
+                // clear move avs
                 if (sq==="av") return null
+                return sq
+            })
+        })
+        return clearBoard
+    }
+
+    // clears board of bpav or wpav 
+    const clearCapAv = arr => {
+        const clearBoard = arr.map(row =>{
+            return row.map(sq => {
+                if (sq && sq.substring(2,4) === "ep") return sq.substring(0,2)
+                if (sq && sq.substring(2,4) === "av") return sq.substring(0,2)
                 return sq
             })
         })
@@ -61,13 +83,26 @@ const Board = () => {
         setCurrPiece(num)
 
         // copy board and clear av markers
-        const updateBoard = [...clearAv(board)]
-        let startRow = Math.floor(num / 8)
-        const twoSpace = updateBoard[startRow - 2][num % 8]
+        const updateBoard = [...clearAv(clearCapAv(board))]
+        const startRow = Math.floor(num / 8)
+
+        // move one squares
         const oneSpace = updateBoard[startRow - 1][num % 8]
 
-        // first pawn move gives two spaces
-        if (num > 47 && !twoSpace) updateBoard[startRow - 2][num % 8] = "av"
+        // capture squares
+        const capRight = updateBoard[startRow - 1][(num % 8) + 1]
+        const capLeft = updateBoard[startRow - 1][(num % 8) - 1]
+
+        // en passant av
+        if ((num + 1) === enPassant) updateBoard[startRow - 1][(num % 8) + 1] = "bpep"
+        if ((num - 1) === enPassant) updateBoard[startRow - 1][(num % 8) - 1] = "bpep"
+
+        // capture available
+        if (capRight === "bp") updateBoard[startRow - 1][(num % 8) + 1] = ("bpav")
+        if (capLeft === "bp") updateBoard[startRow - 1][(num % 8) - 1] = ("bpav")
+        
+        // first pawn can move two spaces
+        if (num > 47 && !updateBoard[startRow - 2][num % 8] && !oneSpace) updateBoard[startRow - 2][num % 8] = "av"
    
         // first space available to move
         if (!oneSpace) updateBoard[startRow - 1][num % 8] = "av"
@@ -83,35 +118,61 @@ const Board = () => {
         setCurrPiece(num)
         
         // copy board and clear av markers
-        const updateBoard = [...clearAv(board)]
-        let startRow = Math.floor(num / 8)
-        const twoSpace = updateBoard[startRow + 2][num % 8]
+        const updateBoard = [...clearAv(clearCapAv(board))]
+        const startRow = Math.floor(num / 8)
+
+        // move squares
         const oneSpace = updateBoard[startRow + 1][num % 8]
 
+        // capture squares
+        const capRight = updateBoard[startRow + 1][(num % 8) + 1]
+        const capLeft = updateBoard[startRow + 1][(num % 8) - 1]
+
+        // capture available
+        if (capRight === "wp") updateBoard[startRow + 1][(num % 8) + 1] =  ("wpav")
+        if (capLeft === "wp") updateBoard[startRow + 1][(num % 8) - 1] =  ("wpav")
+
         // first pawn move gives two spaces
-        if (num < 16 && !twoSpace) updateBoard[startRow + 2][num % 8] = "av"
+        if (num < 16 && !updateBoard[startRow + 2][num % 8] && !oneSpace) updateBoard[startRow + 2][num % 8] = "av"
   
         // first space available to move
         if (!oneSpace) updateBoard[startRow + 1][num % 8] = "av"
         setBoard(updateBoard)  
     }
 
-
-
-
-
     const movePiece = num => {
-        console.log(num, currPiece)
-        let startRow = Math.floor(currPiece / 8)
-        let endRow = Math.floor(num / 8)
+        // copy and clear av 
         const clearBoard = [...clearAv(board)]
+        const startRow = Math.floor(currPiece / 8)
+        const endRow = Math.floor(num / 8)
         const endSq = clearBoard[endRow][num % 8]
-        if (!endSq) {
-            clearBoard[startRow][num % 8] = null
+
+        // edit board for en passant
+        const wEnPassantSq = clearBoard[endRow - 1][num % 8]
+        const bEnPassantSq = clearBoard[endRow + 1][num % 8]
+
+        if (wEnPassantSq === "wpep" || bEnPassantSq === "bpep") {
+            clearBoard[startRow][currPiece % 8] = null
             if (whTurn) clearBoard[endRow][num % 8] = "wp"
             if (!whTurn) clearBoard[endRow][num % 8] = "bp"
         }
-        setBoard(clearBoard)
+
+        // edit board for piece moving or capturing
+        if (!endSq || (endSq === "wpav") || (endSq === "bpav")) {
+            clearBoard[startRow][currPiece % 8] = null
+            if (whTurn) clearBoard[endRow][num % 8] = "wp"
+            if (!whTurn) clearBoard[endRow][num % 8] = "bp"
+        }
+
+
+
+        // update board clear of capture / en passant avs
+        setBoard(clearCapAv(clearBoard))
+
+        // is en passant available to opp?
+        const moveTwoSpace = (currPiece - num) === 16 || (currPiece - num) === -16
+        if (moveTwoSpace) setEnPassant(num)
+        // change turn
         setWhTurn(!whTurn)
     }
 
@@ -154,8 +215,19 @@ const Board = () => {
                         </div>
                     )
                 }
+
+                if (sq === "wpav" || sq === "bpav") {
+                    let sqNum = innerCount()
+                    return(
+                        <div key={sqCount}
+                            className={"square " + sqColor} 
+                            onClick={()=>movePiece(sqNum)}>
+                            <Pawn color="gr"/>
+                        </div>
+                    )
+                }
                 
-                if (sq === "av") {
+                if (sq === "av" || sq === "wpep" || sq === "bpep") {
                     let sqNum = innerCount()
                     return(
                         <div key={sqCount}
@@ -177,8 +249,6 @@ const Board = () => {
         return renderBoard
     }
 
-
-
     return (
         <div>
             <div className="Board">
@@ -194,13 +264,3 @@ const Board = () => {
 }
 
 export default Board;
-
-
-// PSEUDO CODE: 
-
-// X  clicking on piece shows available moves, 
-// edits board array changing null to "av" for available
-// those become highlighted divs
-// re render if "av" squares get onclick to move pieces
-// send if that gets clicked, send coordinates to end turn, update pawns on board
-// X reset button renders new board

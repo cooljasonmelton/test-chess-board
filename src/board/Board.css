@@ -25,22 +25,21 @@
     grid-template: repeat(8, 1fr) / repeat(8, 1fr);
 }
 
-.bl{
-    background-color: #90708C;
+.bl{ background-color: #90708C; }
+.wh{ background-color: white; }
+
+/* markers for available spaces */
+.av-square{
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
 }
-.wh{
-    background-color: white;
-}
+
 .av-marker{
     width: 30%;
     height: 30%;
     border-radius: 50%;
     border: 1px solid #635380;
     background-color: #A1CDA8;
-    cursor: pointer;
-}
-.av-square{
-    width: 100%;
-    height: 100%;
     cursor: pointer;
 }

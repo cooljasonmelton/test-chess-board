@@ -3,6 +3,8 @@ import React from 'react';
 // images 
 import wPawn from './wpawn.png'
 import bPawn from './bpawn.png'
+import gPawn from './gpawn.png'
+
 
 // styling
 import './Pawn.css';
@@ -12,9 +14,12 @@ const Pawn = props => {
 
   return (
     <div className="Pawn">
-      {color === "wh" ? 
-        <img src={wPawn} alt="white pawn" /> 
-          : <img src={bPawn} alt="black pawn" />}
+
+      {color === "gr" ?
+        <img src={gPawn} alt="green pawn" /> 
+          : color === "wh" ? 
+            <img src={wPawn} alt="white pawn" /> 
+              : <img src={bPawn} alt="black pawn" />}
     </div>
   );
 }
